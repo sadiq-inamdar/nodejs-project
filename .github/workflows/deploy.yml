@@ -1,0 +1,47 @@
+name: Deploy Frontend to EKS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  CLUSTER_NAME: nodejs-frontend-cluster
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::643683863113:role/github-terraform-role
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+
+    - name: Pull Docker creds from SSM and create K8s secret
+      run: |
+        cred=$(aws ssm get-parameter --name /docker/registry/cred --with-decryption --region $AWS_REGION --query Parameter.Value --output text)
+        username=$(echo $cred | jq -r .username)
+        password=$(echo $cred | jq -r .password)
+        server=$(echo $cred | jq -r .server)
+
+        kubectl create secret docker-registry docker-secret \
+          --docker-username=$username \
+          --docker-password=$password \
+          --docker-server=$server \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Deploy to EKS
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml

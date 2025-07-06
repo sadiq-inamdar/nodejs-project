@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodejs-frontend
+  template:
+    metadata:
+      labels:
+        app: nodejs-frontend
+    spec:
+      imagePullSecrets:
+        - name: docker-secret
+      containers:
+      - name: nodejs-frontend
+        image: 8951233305/nodejs-frontend:latest
+        ports:
+        - containerPort: 3000
+
+        
