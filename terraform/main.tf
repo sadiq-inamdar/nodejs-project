@@ -30,13 +30,18 @@ module "eks" {
     github = {
       kubernetes_groups = ["system:masters"]
       principal_arn     = "arn:aws:iam::643683863113:role/github-terraform-role"
+
       policy_associations = {
-        full = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSFullAccessPolicy"
+        full = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSFullAccessPolicy"
+          access_scope = {
+            type       = "cluster"
+            namespaces = []
+          }
+        }
       }
     }
   }
-
-
 }
 
 data "aws_eks_cluster" "cluster" {
