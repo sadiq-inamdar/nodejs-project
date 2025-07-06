@@ -3,6 +3,10 @@ name: Provision EKS Infrastructure
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   TF_WORKING_DIR: ./terraform
   AWS_REGION: us-east-1
