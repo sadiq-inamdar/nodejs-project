@@ -1,16 +1,3 @@
-variable "vpc_id" {
-  description = "The ID of the VPC where EKS will be deployed"
-  default     = "vpc-05425b426c515ed87"
-}
-
-variable "subnet_ids" {
-  description = "List of subnet IDs where EKS will be deployed"
-  type        = list(string)
-  default     = [
-    "subnet-0bbd3ddbf62846dc6",  # us-east-1d
-    "subnet-08ff2cafb24127f97"   # us-east-1e
-  ]
-}
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -18,8 +5,8 @@ module "eks" {
   cluster_name    = var.cluster_name
   cluster_version = "1.31"
 
-  subnet_ids = data.aws_subnets.default.ids
-  vpc_id     = data.aws_vpc.default.id
+  subnet_ids = var.subnet_ids
+  vpc_id     = var.vpc_id  
 
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true

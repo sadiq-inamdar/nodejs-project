@@ -13,3 +13,17 @@ variable "docker_username" {
 variable "docker_password" {
   type = string
 }
+
+variable "vpc_id" {
+  description = "The ID of the VPC where EKS will be deployed"
+  default     = "vpc-05425b426c515ed87"
+}
+
+variable "subnet_ids" {
+  description = "List of subnet IDs where EKS will be deployed"
+  type        = list(string)
+  default     = [
+    "subnet-0bbd3ddbf62846dc6",  # us-east-1d
+    "subnet-08ff2cafb24127f97"   # us-east-1e
+  ]
+}
