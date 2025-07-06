@@ -25,5 +25,8 @@ variable "subnet_ids" {
   default     = [
     "subnet-0bbd3ddbf62846dc6",  # us-east-1d
     "subnet-08ff2cafb24127f97"   # us-east-1e
+    "subnet-0b1a2ea44d1840b3b",
+    "subnet-0cd54096a238f1782",
+    "subnet-02da3f9961e298f72"
   ]
 }
