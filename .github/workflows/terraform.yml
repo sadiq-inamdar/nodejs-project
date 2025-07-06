@@ -34,7 +34,8 @@ jobs:
 
     - name: Terraform Plan
       working-directory: ${{ env.TF_WORKING_DIR }}
-      run: terraform plan \
+      run: |
+           terraform plan \
               -var="docker_username=${{ secrets.DOCKER_USERNAME }}" \
               -var="docker_password=${{ secrets.DOCKER_PASSWORD }}" \
               -lock-timeout=30s \
