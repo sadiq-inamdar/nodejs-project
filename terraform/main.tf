@@ -24,22 +24,19 @@ module "eks" {
       capacity_type  = "ON_DEMAND"
     }
   }
-}
+  enable_cluster_creator_admin_permissions = true
 
-module "eks_aws_auth" {
-  source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
-  version = "~> 20.0"
-
-  depends_on  = [module.eks]
-  cluster_name = module.eks.cluster_name
-
-  roles = [
-    {
-      rolearn  = "arn:aws:iam::643683863113:role/github-terraform-role"
-      username = "github"
-      groups   = ["system:masters"]
+  access_entries = {
+    github = {
+      kubernetes_groups = ["system: masters"]
+      principal_arn     = "arn:aws:iam::643683863113:role/github-terraform-role"
+      policy_associations = {
+        full = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSFullAccessPolicy"
+      }
     }
-  ]
+  }
+
+
 }
 
 data "aws_eks_cluster" "cluster" {
