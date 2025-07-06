@@ -28,7 +28,7 @@ module "eks" {
 
   access_entries = {
     github = {
-      kubernetes_groups = ["system: masters"]
+      kubernetes_groups = ["system:masters"]
       principal_arn     = "arn:aws:iam::643683863113:role/github-terraform-role"
       policy_associations = {
         full = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSFullAccessPolicy"
