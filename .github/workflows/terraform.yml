@@ -50,4 +50,5 @@ jobs:
               -var="docker_password=${{ secrets.DOCKER_PASSWORD }}" \
               -lock-timeout=30s \
               -input=false \
-              -no-color
+              -no-color \
+              -auto-approve
