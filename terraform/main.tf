@@ -1,19 +1,16 @@
-data "aws_vpc" "default" {
-  default = true
+variable "vpc_id" {
+  description = "The ID of the VPC where EKS will be deployed"
+  default     = "vpc-05425b426c515ed87"
 }
 
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-  
-  filter {
-    name   = "availability-zone"
-    values = ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1f"]
-  }
+variable "subnet_ids" {
+  description = "List of subnet IDs where EKS will be deployed"
+  type        = list(string)
+  default     = [
+    "subnet-0bbd3ddbf62846dc6",  # us-east-1d
+    "subnet-08ff2cafb24127f97"   # us-east-1e
+  ]
 }
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -23,6 +20,12 @@ module "eks" {
 
   subnet_ids = data.aws_subnets.default.ids
   vpc_id     = data.aws_vpc.default.id
+
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access_cidrs = [
+    "0.0.0.0/0"
+  ]
 
   eks_managed_node_groups = {
     default = {
