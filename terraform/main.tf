@@ -24,6 +24,16 @@ module "eks" {
       capacity_type  = "ON_DEMAND"
     }
   }
+
+   manage_aws_auth_configmap = true
+
+   aws_auth_roles = [
+        {
+        rolearn  = "arn:aws:iam::643683863113:role/github-terraform-role" # OIDC GitHub Actions role
+        username = "github"
+        groups   = ["system:masters"]
+        }
+  ]
 }
 
 data "aws_eks_cluster" "cluster" {
