@@ -2,6 +2,9 @@
 
 This project demonstrates a complete CI/CD pipeline for deploying a Node.js application to Amazon EKS using GitHub Actions, Terraform, and Kubernetes.
 
+## Can access from browser
+# http://a39a7ba3ff0144c39b9d6664abcc1fb1-1158970736.us-east-1.elb.amazonaws.com/
+
 ## 🏗️ Architecture Overview
 
 The project implements a modern DevOps pipeline with the following components:
