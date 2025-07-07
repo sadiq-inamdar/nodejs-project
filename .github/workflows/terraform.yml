@@ -45,7 +45,7 @@ jobs:
     - name: Terraform Apply
       working-directory: ${{ env.TF_WORKING_DIR }}
       run: |
-            terraform destroy \
+            terraform apply \
               -var="docker_username=${{ secrets.DOCKER_USERNAME }}" \
               -var="docker_password=${{ secrets.DOCKER_PASSWORD }}" \
               -lock-timeout=30s \
