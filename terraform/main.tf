@@ -26,6 +26,24 @@ module "eks" {
   }
 }
 
+# Add access entry for GitHub Actions role
+resource "aws_eks_access_entry" "github_actions" {
+  cluster_name      = module.eks.cluster_name
+  principal_arn     = "arn:aws:iam::643683863113:role/github-terraform-role"
+  type              = "STANDARD"
+  kubernetes_groups = []
+}
+
+resource "aws_eks_access_policy_association" "github_actions" {
+  cluster_name  = module.eks.cluster_name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = "arn:aws:iam::643683863113:role/github-terraform-role"
+  
+  access_scope {
+    type = "cluster"
+  }
+}
+
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_name
 
